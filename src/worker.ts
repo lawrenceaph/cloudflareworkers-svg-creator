@@ -65,7 +65,7 @@ function generateHelpResponse(url:string) {
                 <h1>API Usage Guide</h1>
                 <p>To generate an SVG with a number:</p>
                 <code >https://nftimage.pilipinas.dev/[NUMBER].png</code>
-                <p>Replace [NUMBER] with the desired number. This is useful for NFT collections in the test phase. This api can provide images sequentially. Enjoy!</p>
+                <p>Replace [NUMBER] with the desired number. This api can provide low-bandwidth SVGs sequentially. Enjoy!</p>
             </div>
         </body>
         </html>
