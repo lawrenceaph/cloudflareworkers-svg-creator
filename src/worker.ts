@@ -25,8 +25,108 @@ export interface Env {
 	// MY_QUEUE: Queue;
 }
 
+
+function generateHelpResponse(url:string) {
+    return `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>API Usage Guide</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 40px;
+                    background-color: #f7f7f7;
+                    color: #333;
+                }
+                .container {
+                    background-color: #fff;
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                }
+                h1 {
+                    color: #4CAF50;
+                }
+ code {
+        display: block;
+        padding: 10px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>API Usage Guide</h1>
+                <p>To generate an SVG with a number:</p>
+                <code >https://nftimage.pilipinas.dev/[NUMBER].png</code>
+                <p>Replace [NUMBER] with the desired number. This is useful for NFT collections in the test phase. This api can provide images sequentially. Enjoy!</p>
+            </div>
+        </body>
+        </html>
+    `;
+}
+function mixColor(color1:any, color2:any, weight:any) {
+    let w1 = weight;
+    let w2 = 1 - w1;
+    let rgb = [Math.round(color1[0] * w1 + color2[0] * w2),
+               Math.round(color1[1] * w1 + color2[1] * w2),
+               Math.round(color1[2] * w1 + color2[1] * w2)];
+    return rgb;
+}
+
+function randomPastelColor(dark = false) {
+    const randomRGB = [Math.random() * 256, Math.random() * 256, Math.random() * 256];
+    const white = [255, 255, 255];
+    const darkColor = [85, 85, 85]; // This can be adjusted for desired darkness
+
+    if (dark) {
+        return `rgb(${mixColor(randomRGB, darkColor, 0.5).join(",")})`;
+    } else {
+        return `rgb(${mixColor(randomRGB, white, 0.5).join(",")})`;
+    }
+}
+
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-		return new Response('Hello World!');
+
+
+
+
+const url = new URL(request.url);
+  const numberMatch = url.pathname.match(/\/(\d+)\.png/);
+		 if (!numberMatch) {
+    return new Response(
+				generateHelpResponse(), {
+					status:200,
+					headers: {
+						'Content-Type': 'text/html'
+					}
+				}
+			);
+  }
+
+		 const number = numberMatch[1];
+  const textColor = randomPastelColor(true);
+		const backgroundColor = randomPastelColor();
+  const svg = `
+    <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+<rect width="200" height="200" fill="${backgroundColor}" rx="20" ry="20"></rect>
+      <text x="100" y="140" font-family="Arial" font-size="150" text-anchor="middle" fill="${textColor}">${number}</text>
+    </svg>
+  `;
+
+
+		return new Response(svg, {
+			status: 200,
+			headers: {
+				'content-type': 'image/svg+xml'
+			}
+		});
 	},
 };
