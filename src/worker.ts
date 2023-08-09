@@ -26,7 +26,7 @@ export interface Env {
 }
 
 
-function generateHelpResponse(url:string) {
+function generateHelpResponse() {
     return `
         <!DOCTYPE html>
         <html lang="en">
@@ -117,7 +117,7 @@ const url = new URL(request.url);
   const svg = `
     <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
 <rect width="200" height="200" fill="${backgroundColor}" rx="20" ry="20"></rect>
-      <text x="100" y="140" font-family="Arial" font-size="150" text-anchor="middle" fill="${textColor}">${number}</text>
+      <text x="100" y="100" font-family="Arial" font-size="60" text-anchor="middle" fill="${textColor}">${number}</text>
     </svg>
   `;
 
